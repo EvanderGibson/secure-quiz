@@ -2,6 +2,8 @@ import os
 from flask import Flask, url_for, render_template, request
 from flask import redirect
 from flask import session
+from time import sleep
+import time
 
 app = Flask(__name__)
 
@@ -12,6 +14,10 @@ app = Flask(__name__)
 app.secret_key=os.environ["SECRET_KEY"]; #This is an environment variable.  
                                      #The value should be set on the server. 
                                      #To run locally, set in env.bat (env.sh on Macs) and include that file in gitignore so the secret key is not made public.
+
+
+
+
 
 @app.route('/')
 def renderMain():
@@ -24,6 +30,7 @@ def startOver():
 
 @app.route('/page1')
 def renderPage1():
+    session["startTime"] = time.time()
     return render_template('page1.html')
 
 @app.route('/page2',methods=['GET','POST'])
@@ -35,6 +42,8 @@ def renderPage2():
 
 @app.route('/page3',methods=['GET','POST'])
 def renderPage3():
+    session["endTime"]= time.time()
+    TotalTime = session["endTime"] - session["startTime"]
     session["favoriteColor"]=request.form['favoriteColor'] 
     var = False
     if session["answer1"] == "cloud":
@@ -45,7 +54,7 @@ def renderPage3():
       
     else:
         yart = "false"
-    return render_template('page3.html', cloud = session["answer1"], TorF=yart)
+    return render_template('page3.html', cloud = session["answer1"], TorF=yart, yotalyime=TotalTime)
     
     
 if __name__=="__main__":
