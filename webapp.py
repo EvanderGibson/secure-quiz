@@ -28,14 +28,25 @@ def renderPage1():
 
 @app.route('/page2',methods=['GET','POST'])
 def renderPage2():
-    session["firstName"]=request.form['firstName']
-    session["lastName"]=request.form['lastName']
+    session["answer1"]=request.form['answer1']
+    
+  
     return render_template('page2.html')
 
 @app.route('/page3',methods=['GET','POST'])
 def renderPage3():
-    session["favoriteColor"]=request.form['favoriteColor']
-    return render_template('page3.html')
+    session["favoriteColor"]=request.form['favoriteColor'] 
+    var = False
+    if session["answer1"] == "cloud":
+        var = True
+   
+    if var == True:
+        yart = "true"
+      
+    else:
+        yart = "false"
+    return render_template('page3.html', cloud = session["answer1"], TorF=yart)
+    
     
 if __name__=="__main__":
-    app.run(debug=False)
+    app.run(debug=True)
