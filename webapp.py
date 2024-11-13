@@ -23,7 +23,8 @@ def renderPage1():
 @app.route('/page2', methods=['GET', 'POST'])
 def renderPage2():
     if request.method == 'POST':
-        session["answer1"] = request.form['answer1']
+        if "answer1" not in session:
+            session["answer1"] = request.form['answer1']
         return redirect(url_for('renderPage2'))
     return render_template('page2.html')
     
