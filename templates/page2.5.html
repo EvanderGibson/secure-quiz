@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Page 2.5{% endblock %}
+
+{% block content %}
+  <h1>I never was, am always to be; everyone's looking, but no one sees me. What am I?</h1>
+
+ <form action={{ url_for("renderPage3") }} method="POST">
+  Favorite Color:<br>
+  <input type="text" name="answer3">
+  <input type="submit" value="Submit">
+ </form> 
+
+
+
+{% endblock %}

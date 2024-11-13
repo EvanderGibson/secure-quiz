@@ -26,19 +26,29 @@ def renderPage2():
         session["answer1"] = request.form['answer1']
         return redirect(url_for('renderPage2'))
     return render_template('page2.html')
+    
+@app.route('/page2.5', methods=['GET', 'POST'])
+def renderPage25():
+    if request.method == 'POST':
+        session["answer2"] = request.form['answer2']
+        return redirect(url_for('renderPage25'))
+    return render_template('page2.5.html')   
 
 @app.route('/page3', methods=['GET', 'POST'])
 def renderPage3():
     if request.method == 'POST':
-        session["favoriteColor"] = request.form['favoriteColor']
+        session["answer3"] = request.form['answer3']
         session["endTime"] = time.time()
         return redirect(url_for('renderPage3'))
     
     total_time = session.get("endTime", time.time()) - session.get("startTime", time.time())
     var = session.get("answer1") == "cloud"
     yart = "true" if var else "false"
-    
-    return render_template('page3.html', cloud=session.get("answer1"), TorF=yart, yotalyime=total_time)
+    pablo = session.get("answer2") == "keyboard"
+    prunice = "true" if pablo else "false"
+    voweltowel = session.get("answer3") == "tomorrow"
+    clambert = "true" if voweltowel else "false"
+    return render_template('page3.html', cloud=session.get("answer1"), TorF=yart, yotalyime=total_time, ovulatina=prunice, keyboard=session.get("answer2"), tomorrow=session.get("answer3"), hyjinkrat=clambert)
 
 if __name__ == "__main__":
     app.run(debug=True)
