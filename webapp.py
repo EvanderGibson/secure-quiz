@@ -43,6 +43,13 @@ def renderPage3():
             session["answer3"] = request.form['answer3']
         session["endTime"] = time.time()
         return redirect(url_for('renderPage3'))
+    score=0
+    if session["answer1"] == "cloud":
+        score = score + 1
+    if session["answer2"] == "keyboard":
+        score = score + 1
+    if session["answer3"] == "tomorrow":
+        score = score + 1
     
     total_time = session.get("endTime", time.time()) - session.get("startTime", time.time()) 
     
@@ -52,7 +59,7 @@ def renderPage3():
     prunice = "true" if pablo else "false"
     voweltowel = session.get("answer3") == "tomorrow"
     clambert = "true" if voweltowel else "false"
-    return render_template('page3.html', cloud=session.get("answer1"), TorF=yart, yotalyime=str(round(total_time,1)), ovulatina=prunice, keyboard=session.get("answer2"), tomorrow=session.get("answer3"), hyjinkrat=clambert)
+    return render_template('page3.html', cloud=session.get("answer1"), TorF=yart, yotalyime=str(round(total_time,1)), ovulatina=prunice, keyboard=session.get("answer2"), tomorrow=session.get("answer3"), hyjinkrat=clambert, splooge=score)
 
 if __name__ == "__main__":
     app.run(debug=True)
