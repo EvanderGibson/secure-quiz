@@ -1,23 +1,10 @@
 import os
-from flask import Flask, url_for, render_template, request
-from flask import redirect
-from flask import session
-from time import sleep
+from flask import Flask, url_for, render_template, request, redirect, session
 import time
 
 app = Flask(__name__)
 
-# In order to use "sessions",you need a "secret key".
-# This is something random you generate.  
-# For more info see: https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY
-
-app.secret_key=os.environ["SECRET_KEY"]; #This is an environment variable.  
-                                     #The value should be set on the server. 
-                                     #To run locally, set in env.bat (env.sh on Macs) and include that file in gitignore so the secret key is not made public.
-
-
-
-
+app.secret_key = os.environ["SECRET_KEY"]
 
 @app.route('/')
 def renderMain():
@@ -25,37 +12,33 @@ def renderMain():
 
 @app.route('/startOver')
 def startOver():
-    session.clear() #clears variable values and creates a new session
-    return redirect(url_for('renderMain')) # url_for('renderMain') could be replaced with '/'
+    session.clear()
+    return redirect(url_for('renderMain'))
 
 @app.route('/page1')
 def renderPage1():
     session["startTime"] = time.time()
     return render_template('page1.html')
 
-@app.route('/page2',methods=['GET','POST'])
+@app.route('/page2', methods=['GET', 'POST'])
 def renderPage2():
-    session["answer1"]=request.form['answer1']
-    
-  
+    if request.method == 'POST':
+        session["answer1"] = request.form['answer1']
+        return redirect(url_for('renderPage2'))
     return render_template('page2.html')
 
-@app.route('/page3',methods=['GET','POST'])
+@app.route('/page3', methods=['GET', 'POST'])
 def renderPage3():
-    session["endTime"]= time.time()
-    TotalTime = session["endTime"] - session["startTime"]
-    session["favoriteColor"]=request.form['favoriteColor'] 
-    var = False
-    if session["answer1"] == "cloud":
-        var = True
-   
-    if var == True:
-        yart = "true"
-      
-    else:
-        yart = "false"
-    return render_template('page3.html', cloud = session["answer1"], TorF=yart, yotalyime=TotalTime)
+    if request.method == 'POST':
+        session["favoriteColor"] = request.form['favoriteColor']
+        session["endTime"] = time.time()
+        return redirect(url_for('renderPage3'))
     
+    total_time = session.get("endTime", time.time()) - session.get("startTime", time.time())
+    var = session.get("answer1") == "cloud"
+    yart = "true" if var else "false"
     
-if __name__=="__main__":
+    return render_template('page3.html', cloud=session.get("answer1"), TorF=yart, yotalyime=total_time)
+
+if __name__ == "__main__":
     app.run(debug=True)
